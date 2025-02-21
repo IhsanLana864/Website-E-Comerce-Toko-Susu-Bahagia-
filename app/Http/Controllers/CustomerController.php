@@ -101,6 +101,13 @@ class CustomerController extends Controller
 
         return response()->json(['success' => 'Barang dihapus dari keranjang']);
     }
+    
+    public function cartDetail()
+    {
+        $cart = session()->get('cart', []);
+        
+        return view('cart-detail', compact('cart'));
+    }
 
     // public function checkout()
     // {

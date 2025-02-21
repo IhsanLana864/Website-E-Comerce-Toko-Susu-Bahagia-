@@ -31,6 +31,16 @@
                         </td>
                     </tr>
                 @endforeach
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total Harga</td>
+                        <td id="total-harga"></td>
+                        <td>
+                            <a href="/cart-detail" class="btn btn-primary btn-sm">Pesan</a>
+                        </td>
+                    </tr>
             </tbody>
         </table>
     </div>
@@ -38,6 +48,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            function updateTotalHarga() {
+                let totalHarga = 0;
+                $("tbody tr").each(function () {
+                    let totalItem = $(this).find("span[id^='total-']").text().replace(/[^0-9]/g, '');
+                    if (totalItem) {
+                        totalHarga += parseInt(totalItem);
+                    }
+                });
+                $("#total-harga").text("Rp" + totalHarga.toLocaleString("id-ID"));
+            }
+
             $(".increment").click(function () {
                 let id = $(this).data("id");
                 let stok = $(this).data("stok"); 
@@ -94,6 +115,7 @@
                     }
                 });
             }
+            updateTotalHarga();
         });
     </script>
 @endsection

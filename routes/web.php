@@ -15,6 +15,7 @@ Route::post('/add-to-cart', [CustomerController::class, 'addToCart'])->name('add
 Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
 Route::post('/update-cart', [CustomerController::class, 'updateCart'])->name('update.cart');
 Route::post('/remove-from-cart', [CustomerController::class, 'removeFromCart'])->name('remove.from.cart');
+Route::get('/cart-detail', [CustomerController::class, 'cartDetail'])->name('cartDetail');
 
 Route::get('/about', function () {return view('about');});
 Route::get('/tracking', function () {return view('tracking');});

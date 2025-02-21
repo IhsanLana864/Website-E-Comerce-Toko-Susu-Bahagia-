@@ -13,7 +13,9 @@
             <th>Jam</th>
             <th>Jumlah</th>
             <th>Harga Satuan</th>
+            <th>Keuntungan</th>
             <th>Penjual</th>
+            <th>Action</th>
         </tr>
         @foreach($barangKeluar as $item)
         <tr>
@@ -23,7 +25,11 @@
             <td>{{ $item->jam }}</td>
             <td>{{ $item->jumlah }}</td>
             <td>{{ $item->harga_satuan }}</td>
+            <td>{{ $item->keuntungan }}</td>
             <td>{{ $item->penjual }}</td>
+            <td>
+                <a href="{{ route('admin.keluar.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+            </td>
         </tr>
         @endforeach
     </table>

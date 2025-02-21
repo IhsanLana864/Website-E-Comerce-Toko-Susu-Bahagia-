@@ -43,12 +43,16 @@
                 let kategori = $(this).data("kategori");
 
                 $.ajax({
-                    url: "{{ route('index') }}",  // Pastikan sesuai dengan route yang telah diperbaiki
+                    url: "{{ route('index') }}",
                     type: "GET",
                     data: { kategori: kategori },
                     success: function(response) {
                         let html = "";
                         $.each(response, function(index, barang) {
+                            let tombolBeli = barang.stok > 0 
+                                ? `<a href="#" class="btn btn-primary add-to-cart" data-id="${barang.id}" data-stok="${barang.stok}">Beli Sekarang</a>`
+                                : `<button class="btn btn-secondary" disabled>Stok Habis</button>`;
+
                             html += `
                                 <div class="col-md-4 mb-4 produk-item">
                                     <div class="card shadow-lg border-0 rounded">
@@ -58,7 +62,7 @@
                                             <p class="card-title">${barang.satuan}</p>
                                             <p class="card-title">Rp${barang.harga.toLocaleString('id-ID')}</p>
                                             <p class="card-title">Stok: ${barang.stok}</p>
-                                            <a href="#" class="btn btn-primary add-to-cart" data-id="{{ $barang->id }}" data-stok="{{ $barang->stok }}">Beli Sekarang</a>
+                                            ${tombolBeli}
                                         </div>
                                     </div>
                                 </div>`;
@@ -76,7 +80,7 @@
                 });
             });
 
-            $(".add-to-cart").click(function(e) {
+            $(document).on("click", ".add-to-cart", function(e) { 
                 e.preventDefault();
                 let barangId = $(this).data("id");
                 let stok = $(this).data("stok");

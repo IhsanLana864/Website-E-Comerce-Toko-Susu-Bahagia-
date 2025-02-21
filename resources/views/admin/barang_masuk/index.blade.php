@@ -12,10 +12,12 @@
             <th>Tanggal</th>
             <th>Jam</th>
             <th>Jumlah</th>
+            <th>Sisa Stok</th>
             <th>Kedaluwarsa</th>
             <th>Harga Satuan</th>
             <th>Sumber</th>
             <th>Penerima</th>
+            <th>Action</th>
         </tr>
         @foreach($barangMasuk as $item)
         <tr>
@@ -24,10 +26,14 @@
             <td>{{ $item->tanggal }}</td>
             <td>{{ $item->jam }}</td>
             <td>{{ $item->jumlah }}</td>
+            <td>{{ $item->stok_sisa }}</td>
             <td>{{ $item->kedaluwarsa }}</td>
             <td>{{ $item->harga_satuan }}</td>
             <td>{{ $item->sumber }}</td>
             <td>{{ $item->penerima }}</td>
+            <td>
+                <a href="{{ route('admin.masuk.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+            </td>
         </tr>
         @endforeach
     </table>
