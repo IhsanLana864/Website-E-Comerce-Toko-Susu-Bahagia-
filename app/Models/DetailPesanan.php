@@ -8,4 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPesanan extends Model
 {
     use HasFactory;
+
+    protected $fillable =   [
+                                'pesanan_id', 'barang_id', 'barang_masuk_id',
+                                'jumlah', 'harga'
+                            ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id');
+    }
+
+    public function barangMasuk()
+    {
+        return $this->belongsTo(barangMasuk::class, 'barang_masuk_id');
+    }
+
+    public function pesanan()
+    {
+        return $this->belongsTo(Pesanan::class, 'pesanan_id');
+    }
 }

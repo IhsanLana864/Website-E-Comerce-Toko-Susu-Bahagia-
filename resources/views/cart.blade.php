@@ -3,46 +3,68 @@
 @section('content')
     <div class="container mt-5">
         <h2>Keranjang Belanja</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Gambar</th>
-                    <th>Nama Barang</th>
-                    <th>Harga</th>
-                    <th>Jumlah</th>
-                    <th>Total</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($cart as $id => $item)
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Pesan jika keranjang kosong --}}
+        @if(empty($cart))
+            <div class="alert alert-warning">
+                Keranjang kosong, silakan <a href="{{ route('index') }}">belanja</a>.
+            </div>
+        @else
+
+            <table class="table">
+                <thead>
                     <tr>
-                        <td><img src="{{ asset('storage/' . $item['image']) }}" width="50" alt="{{ $item['name'] }}"></td>
-                        <td>{{ $item['name'] }}</td>
-                        <td>Rp{{ number_format($item['price'], 0, ',', '.') }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-secondary decrement" data-id="{{ $id }}">-</button>
-                            <span class="mx-2 quantity" id="quantity-{{ $id }}">{{ $item['quantity'] }}</span>
-                            <button class="btn btn-sm btn-outline-secondary increment" data-id="{{ $id }}" data-stok="{{ $item['stok'] }}">+</button>
-                        </td>
-                        <td>Rp<span id="total-{{ $id }}">{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</span></td>
-                        <td>
-                            <button class="btn btn-danger btn-sm remove-from-cart" data-id="{{ $id }}">Hapus</button>
-                        </td>
+                        <th>Gambar</th>
+                        <th>Nama Barang</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Aksi</th>
                     </tr>
-                @endforeach
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>Total Harga</td>
-                        <td id="total-harga"></td>
-                        <td>
-                            <a href="/cart-detail" class="btn btn-primary btn-sm">Pesan</a>
-                        </td>
-                    </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @php $totalHarga = 0; @endphp
+                    @foreach ($cart as $id => $item)
+                        @php 
+                            $subtotal = $item['price'] * $item['quantity'];
+                            $totalHarga += $subtotal;
+                        @endphp
+                        <tr>
+                            <td><img src="{{ asset('storage/' . $item['image']) }}" width="50" alt="{{ $item['name'] }}"></td>
+                            <td>{{ $item['name'] }}</td>
+                            <td>Rp{{ number_format($item['price'], 0, ',', '.') }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-secondary decrement" data-id="{{ $id }}">-</button>
+                                <span class="mx-2 quantity" id="quantity-{{ $id }}">{{ $item['quantity'] }}</span>
+                                <button class="btn btn-sm btn-outline-secondary increment" data-id="{{ $id }}" data-stok="{{ $item['stok'] }}">+</button>
+                            </td>
+                            <td>Rp<span id="total-{{ $id }}">{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</span></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm remove-from-cart" data-id="{{ $id }}">Hapus</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Total Harga</strong></td>
+                            <td><strong><span id="total-harga">{{ number_format($totalHarga, 0, ',', '.') }}</span></strong></td>
+                            <td>
+                                <a href="{{ route('cartDetail') }}" class="btn btn-primary btn-sm">Pesan</a>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        @endif
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,15 +129,16 @@
                         quantity: quantity
                     },
                     success: function (response) {
-                        $("#quantity-" + id).text(response.quantity); // Update jumlah
-                        $("#total-" + id).text(response.total); // Update total harga
+                        $("#quantity-" + id).text(response.quantity);
+                        $("#total-" + id).text(response.total);
+                        $("#total-harga").text("Rp" + response.totalHarga); // Update total harga seluruh keranjang
                     },
                     error: function (xhr) {
                         alert(xhr.responseJSON.error);
                     }
                 });
             }
-            updateTotalHarga();
+            
         });
     </script>
 @endsection

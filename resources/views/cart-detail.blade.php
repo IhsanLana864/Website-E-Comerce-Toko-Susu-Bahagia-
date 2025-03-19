@@ -1,12 +1,26 @@
 @extends('layouts.main')
 
 @section('content')
+
     <div class="container mt-5">
         <h2>Keranjang Belanja</h2>
+        
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="row gap-2">
             <div class="col border p-2">
-                <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
+                <form action="{{ route('checkout.cart') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
                         <input type="text" class="form-control" name="nama" placeholder="nama" required>
@@ -14,17 +28,43 @@
                     
                     <div class="mb-3">
                         <label class="form-label">Nomor Telepon</label>
-                        <input type="number" class="form-control" name="harga" placeholder="17000" required>
+                        <input type="number" class="form-control" name="no_telepon" placeholder="08xx" required>
                     </div>
                     
                     <div class="mb-3">
+                        <label class="form-label">Pengiriman</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="pengiriman" id="internal" value="internal" onclick="toggleInput()" checked>
+                            <label class="form-check-label" for="internal">
+                                Internal (Cikarang)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="pengiriman" id="eksternal" value="eksternal" onclick="toggleInput()">
+                            <label class="form-check-label" for="eksternal">
+                                Eksternal (Luar Cikarang)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Input tambahan yang hanya muncul jika memilih "Internal (Cikarang)" -->
+                    <div class="mb-3" id="extraInput" style="display: none;">
+                        <label class="form-label">Ekspedisi</label>
+                        <select class="form-select" name="ekspedisi" id="ekspedisiSelect">
+                            <option disabled selected value="">Pilih Ekspedisi</option>
+                            <option value="JNE">JNE</option>
+                            <option value="JNT">JNT</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="satuan" placeholder="Kg" required>
+                        <input type="text" class="form-control" name="alamat" placeholder="Jalan xxx" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Bukti Pembayaran</label>
-                        <input type="file" class="form-control" name="gambar" required>
+                        <input type="file" class="form-control" name="bukti" required>
                     </div>
                     
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -69,19 +109,33 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            function updateTotalHarga() {
-                let totalHarga = 0;
-                $("tbody tr").each(function () {
-                    let totalItem = $(this).find("span[id^='total-']").text().replace(/[^0-9]/g, '');
-                    if (totalItem) {
-                        totalHarga += parseInt(totalItem);
-                    }
-                });
-                $("#total-harga").text("Rp" + totalHarga.toLocaleString("id-ID"));
-            }
-            
-            updateTotalHarga();
-        });
-    </script>
+    function toggleInput() {
+        let pengiriman = document.querySelector('input[name="pengiriman"]:checked').value;
+        let extraInput = document.getElementById('extraInput');
+        let ekspedisiSelect = document.getElementById('ekspedisiSelect');
+
+        if (pengiriman === "eksternal") {
+            extraInput.style.display = "block";
+            ekspedisiSelect.required = true;
+        } else {
+            extraInput.style.display = "none";
+            ekspedisiSelect.required = false;
+        }
+    }
+
+    $(document).ready(function () {
+        function updateTotalHarga() {
+            let totalHarga = 0;
+            $("tbody tr").each(function () {
+                let totalItem = $(this).find("span[id^='total-']").text().replace(/[^0-9]/g, '');
+                if (totalItem) {
+                    totalHarga += parseInt(totalItem);
+                }
+            });
+            $("#total-harga").text("Rp" + totalHarga.toLocaleString("id-ID"));
+        }
+        toggleInput();
+        updateTotalHarga();
+    });
+</script>
 @endsection

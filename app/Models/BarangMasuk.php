@@ -16,4 +16,14 @@ class BarangMasuk extends Model
     {
         return $this->belongsTo(Barang::class, 'barang_id');
     }
+
+    public function detailPesanan()
+    {
+        return $this->hasMany(DetailPesanan::class);
+    }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
 }

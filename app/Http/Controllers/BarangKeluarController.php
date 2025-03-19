@@ -136,6 +136,11 @@ class BarangKeluarController extends Controller
             $barangLama = Barang::findOrFail($barangKeluar->barang_id);
             $jumlahLama = $barangKeluar->jumlah;
 
+            // **Cek apakah jumlah baru lebih besar dari jumlah lama**
+            if ($request->jumlah > $jumlahLama) {
+                return redirect()->back()->with('error', 'Jumlah baru tidak boleh lebih besar dari jumlah lama (' . $jumlahLama . ')!');
+            }
+
             // **1. Kembalikan stok lama sebelum update**
             $barangLama->stok += $jumlahLama;
             $barangLama->save();
@@ -148,12 +153,17 @@ class BarangKeluarController extends Controller
                 return redirect()->back()->with('error', 'Stok tidak mencukupi! Hanya tersedia ' . $total_stok_tersedia . ' unit.');
             }
 
-            // **3. Jangan langsung hapus barang keluar lama, cukup ubah jumlahnya jadi 0**
-            BarangKeluar::where('id', $id)->update(['jumlah' => 0]);
+            // **3. Hapus Barang Keluar Lama Jika Jumlahnya 0**
+            if ($jumlahLama > 0) {
+                $barangKeluar->delete();
+            }
 
-            // **4. Kembalikan stok barang masuk yang digunakan sebelumnya**
-            BarangMasuk::where('barang_id', $barangKeluar->barang_id)
-                ->increment('stok_sisa', $jumlahLama);
+            // **4. Kembalikan stok barang masuk yang digunakan sebelumnya (hanya ke barang_masuk_id yang terkait)**
+            $barangMasuk = BarangMasuk::find($barangKeluar->barang_masuk_id);
+            if ($barangMasuk) {
+                $barangMasuk->stok_sisa += $jumlahLama;
+                $barangMasuk->save();
+            }
 
             // **5. Gunakan FEFO (First Expired, First Out) untuk update barang masuk yang digunakan**
             $sisa_dibutuhkan = $request->jumlah;

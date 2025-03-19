@@ -27,6 +27,7 @@
         <div class="mb-3">
             <label class="form-label">Jumlah</label>
             <input type="number" class="form-control" name="jumlah" value="{{ $barangKeluar->jumlah }}" required>
+            <p>Hanya Bisa Mengurangi Jumlah</p>
         </div>
         <div class="mb-3">
             <label class="form-label">Harga Satuan</label>

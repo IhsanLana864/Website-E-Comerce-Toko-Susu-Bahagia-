@@ -38,7 +38,7 @@
                 </ul>
             </div>
             <li class="nav-item"><a class="nav-link" href="#">Laporan</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('admin.pesanan.index') }}">Pesanan</a></li>
         </ul>
     </div>
     

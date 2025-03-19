@@ -17,10 +17,10 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('no_telepon', 20);
             $table->integer('total_harga');
-            $table->integer('dibayar')->default(0);
-            $table->integer('tagihan');
+            $table->string('ekspedisi');
             $table->string('status');
-            $table->string('midtrans_order_id')->nullable();
+            $table->string('bukti');
+            $table->string('order_id')->nullable();
             $table->timestamps();
         });
     }
