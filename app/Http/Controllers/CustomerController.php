@@ -8,13 +8,65 @@ use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\Pesanan;
 use App\Models\DetailPesanan;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class CustomerController extends Controller
 {
+    public function kirimPesan($target, $message)
+    {
+        $token = env('FONTEE_API_KEY');
+
+        try {
+            // Pastikan token ada
+            if (!$token) {
+                Log::error("Token API Fonnte tidak ditemukan di .env.");
+                return false;
+            }
+    
+            // Kirim request ke API
+            $response = Http::withOptions([
+                'verify' => false
+            ])->withHeaders([
+                'Authorization' => $token
+            ])->post('https://api.fonnte.com/send', [
+                'target' => $target,
+                'message' => $message
+            ]);
+    
+            // Ambil status dan respons API
+            $statusCode = $response->status();
+            $body = $response->json();
+    
+            // Logging response dari API
+            Log::info("Respon dari Fonnte API", [
+                'status' => $statusCode,
+                'body' => $body
+            ]);
+    
+            // Jika respons bukan 200, catat error
+            if ($statusCode !== 200) {
+                Log::error("Gagal mengirim pesan ke Fonnte.", [
+                    'status' => $statusCode,
+                    'response' => $body
+                ]);
+            }
+    
+            return $body;
+        } catch (\Exception $e) {
+            Log::error("Terjadi kesalahan dalam kirimPesan()", [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+            return false;
+        }
+    }
+
     public function index(Request $request)
     {
         $kategori = $request->kategori ?? 'all'; // Pastikan kategori memiliki nilai default
@@ -152,6 +204,8 @@ class CustomerController extends Controller
 
             $ekspedisiValue = $request->pengiriman == 'internal' ? 'Internal' : $request->ekspedisi;
 
+            $order_id = Str::uuid();
+
             // Simpan pesanan dengan total harga yang dihitung
             $pesanan = Pesanan::create([
                 'nama' => $request->nama,
@@ -161,12 +215,39 @@ class CustomerController extends Controller
                 'ekspedisi' => $ekspedisiValue,
                 'bukti' => $buktiPath,
                 'status' => 'Pending',
-                'order_id' => Str::uuid(),
+                'order_id' => $order_id,
             ]);
+
+            Notifikasi::create([
+                'pesanan_id' => $pesanan->id,
+                'jenis' => 'Pesanan',
+                'dibaca' => false,
+                'pesan' => "Pesanan baru dari {$request->nama} telah dibuat dengan total harga Rp{$totalHarga}.",
+            ]);
+
+            // Kirim notifikasi ke admin lewat Fontee
+            $noAdmin = "087786425111";
+            #ke admin
+            try {
+                $this->kirimPesan($noAdmin, "Pesanan Baru dari: #" . $request->nama);
+            } catch (\Exception $e) {
+                Log::error("Gagal mengirim notifikasi: " . $e->getMessage());
+            }
             
             if (!$pesanan) {
                 throw new \Exception("Pesanan gagal disimpan.");
             }
+
+            // #ke customer
+            // try {
+            //     $this->kirimPesan($request->no_telepon, "Pesanan Anda sudah dicatat dan sedang diproses: #Order_id " . $order_id);
+            // } catch (\Exception $e) {
+            //     Log::error("Gagal mengirim notifikasi: " . $e->getMessage());
+            // }
+            
+            // if (!$pesanan) {
+            //     throw new \Exception("Pesanan gagal disimpan.");
+            // }
             
             // Proses setiap item di cart dengan logika FEFO
             foreach ($cart as $item) {
@@ -192,19 +273,6 @@ class CustomerController extends Controller
                         'barang_masuk_id' => $stok->id,
                         'jumlah' => $alokasi,
                         'harga' => $item['price'],
-                    ]);
-                    
-                    // Catat barang keluar untuk batch ini dengan perhitungan keuntungan
-                    BarangKeluar::create([
-                        'barang_id' => $item['id'],
-                        'barang_masuk_id' => $stok->id,
-                        'tanggal' => now(),
-                        'jam' => now()->format('H:i:s'),
-                        'jumlah' => $alokasi,
-                        'harga_satuan' => $item['price'],
-                        // Keuntungan dihitung sebagai selisih harga jual dengan harga_satuan dari batch (barang_masuk)
-                        'keuntungan' => max(0, ($item['price'] - $stok->harga_satuan) * $alokasi),
-                        'penjual' => $request->nama,
                     ]);
                     
                     // Kurangi stok_sisa pada batch dan stok global barang

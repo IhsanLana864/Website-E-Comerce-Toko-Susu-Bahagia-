@@ -24,6 +24,7 @@
             <td>{{ $pesanan->status }}</td>
 
             <td>
+                <a href="{{ route('admin.pesanan.show', $pesanan->id) }}" class="btn btn-primary">Show</a>
                 <a href="{{ route('admin.pesanan.edit', $pesanan->id) }}" class="btn btn-warning">Edit</a>
             </td>
         </tr>

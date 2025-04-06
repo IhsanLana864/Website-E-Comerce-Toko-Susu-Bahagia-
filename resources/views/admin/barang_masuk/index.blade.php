@@ -32,6 +32,7 @@
             <td>{{ $item->sumber }}</td>
             <td>{{ $item->penerima }}</td>
             <td>
+                <a href="{{ route('admin.masuk.show', $item->id) }}" class="btn btn-primary">Show</a>
                 <a href="{{ route('admin.masuk.edit', $item->id) }}" class="btn btn-warning">Edit</a>
             </td>
         </tr>

@@ -7,6 +7,8 @@ use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\LaporanController;
 
 #INDEX
 Route::get('/', [CustomerController::class, 'index'])->name('index');
@@ -34,3 +36,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('keluar', BarangKeluarController::class);
     Route::resource('pesanan', PesananController::class);
 });
+
+#NOTIF
+Route::post('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.read');
+
+#LAPORAN
+Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+// Route::get('/admin/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.exportExcel');
+Route::get('/admin/laporan/export-pdf', [LaporanController::class, 'exportPDF'])->name('laporan.exportPDF');

@@ -15,6 +15,17 @@ class BarangMasukController extends Controller
         return view('admin.barang_masuk.index', compact('barangMasuk'));
     }
 
+    public function show($id)
+    {
+        $barangMasuk = BarangMasuk::find($id);
+        if (!$barangMasuk) {
+            return redirect()->route('admin.masuk.index')->with('error', 'Data tidak ditemukan');
+        }
+        
+        $barang = Barang::find($barangMasuk->barang_id);
+        return view('admin.barang_masuk.show', compact('barangMasuk', 'barang'));
+    }
+
     public function create()
     {
         $barangs = Barang::all();
