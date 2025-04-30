@@ -15,59 +15,10 @@ use Illuminate\Support\Facades\Log;
 
 class PesananController extends Controller
 {
-    public function kirimPesan($target, $message)
+    public function index(Request $request)
     {
-        $token = env('FONTEE_API_KEY');
+        $pesanans = Pesanan::get();
 
-        try {
-            // Pastikan token ada
-            if (!$token) {
-                Log::error("Token API Fonnte tidak ditemukan di .env.");
-                return false;
-            }
-    
-            // Kirim request ke API
-            $response = Http::withOptions([
-                'verify' => false
-            ])->withHeaders([
-                'Authorization' => $token
-            ])->post('https://api.fonnte.com/send', [
-                'target' => $target,
-                'message' => $message
-            ]);
-    
-            // Ambil status dan respons API
-            $statusCode = $response->status();
-            $body = $response->json();
-    
-            // Logging response dari API
-            Log::info("Respon dari Fonnte API", [
-                'status' => $statusCode,
-                'body' => $body
-            ]);
-    
-            // Jika respons bukan 200, catat error
-            if ($statusCode !== 200) {
-                Log::error("Gagal mengirim pesan ke Fonnte.", [
-                    'status' => $statusCode,
-                    'response' => $body
-                ]);
-            }
-    
-            return $body;
-        } catch (\Exception $e) {
-            Log::error("Terjadi kesalahan dalam kirimPesan()", [
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
-            ]);
-            return false;
-        }
-    }
-
-    public function index()
-    {
-        $pesanans = Pesanan::all();
         return view('admin.pesanan.index', compact('pesanans'));
     }
 
@@ -131,20 +82,70 @@ class PesananController extends Controller
             DB::commit();
 
             // Notifikasi ke WA pelanggan
-            // try {
-            //     $this->kirimPesan($pesanan->no_telepon, "Pesanan anda " . $request->status);
-            // } catch (\Exception $e) {
-            //     Log::error("Gagal mengirim notifikasi: " . $e->getMessage());
-            // }
+            try {
+                $this->kirimPesan($pesanan->no_telepon, "Pesanan anda " . $request->status);
+            } catch (\Exception $e) {
+                Log::error("Gagal mengirim notifikasi: " . $e->getMessage());
+            }
             
-            // if (!$pesanan) {
-            //     throw new \Exception("Pesanan gagal disimpan.");
-            // }
+            if (!$pesanan) {
+                throw new \Exception("Pesanan gagal disimpan.");
+            }
 
             return redirect()->route('admin.pesanan.index')->with('success', 'Status pesanan berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('admin.pesanan.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function kirimPesan($target, $message)
+    {
+        $token = env('FONTEE_API_KEY');
+
+        try {
+            // Pastikan token ada
+            if (!$token) {
+                Log::error("Token API Fonnte tidak ditemukan di .env.");
+                return false;
+            }
+    
+            // Kirim request ke API
+            $response = Http::withOptions([
+                'verify' => false
+            ])->withHeaders([
+                'Authorization' => $token
+            ])->post('https://api.fonnte.com/send', [
+                'target' => $target,
+                'message' => $message
+            ]);
+    
+            // Ambil status dan respons API
+            $statusCode = $response->status();
+            $body = $response->json();
+    
+            // Logging response dari API
+            Log::info("Respon dari Fonnte API", [
+                'status' => $statusCode,
+                'body' => $body
+            ]);
+    
+            // Jika respons bukan 200, catat error
+            if ($statusCode !== 200) {
+                Log::error("Gagal mengirim pesan ke Fonnte.", [
+                    'status' => $statusCode,
+                    'response' => $body
+                ]);
+            }
+    
+            return $body;
+        } catch (\Exception $e) {
+            Log::error("Terjadi kesalahan dalam kirimPesan()", [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+            return false;
         }
     }
 }

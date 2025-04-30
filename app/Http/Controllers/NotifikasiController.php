@@ -8,21 +8,26 @@ use App\Models\Notifikasi;
 
 class NotifikasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $notifikasis = Notifikasi::latest()->get();
-        return view('admin.layouts.main', compact('notifikasis'));
+        $notifikasis = Notifikasi::latest()->paginate(10);
+
+        if ($request->ajax()) {
+            return view('partials.admin.notifikasi-list', compact('notifikasis'))->render();
+        }
+
+        return view('admin.notifikasi', compact('notifikasis'));
     }
 
     public function markAsRead($id)
     {
         $notif = Notifikasi::find($id);
-        if (!$notif) {
-            return response()->json(['success' => false, 'message' => 'Notifikasi tidak ditemukan'], 404);
+        if ($notif) {
+            $notif->dibaca = true;
+            $notif->save();
+            return response()->json(['success' => true]);
         }
 
-        $notif->update(['dibaca' => true]); 
-
-        return response()->json(['success' => true]);
+        return response()->json(['success' => false], 404);
     }
 }

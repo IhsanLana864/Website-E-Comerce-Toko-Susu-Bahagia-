@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class BarangKeluarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $barangKeluar = BarangKeluar::with('barang')->get();
+
         return view('admin.barang_keluar.index', compact('barangKeluar'));
     }
 

@@ -8,9 +8,9 @@ use App\Models\Kategori;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::get();
 
         return view('admin.kategori.index', compact('kategoris'));
     }
@@ -38,7 +38,7 @@ class KategoriController extends Controller
 
     public function edit(Kategori $kategori)
     {
-        return view('admin.kategori.edit', compact('kategori')); // Form edit data
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     public function update(Request $request, Kategori $kategori)

@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\BarangMasuk;
 use App\Models\Notifikasi;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -57,13 +59,14 @@ class CekKedaluwarsa extends Command
                     'barang_masuk_id' => $barang->id,
                     'jenis' => 'Kedaluwarsa',
                     'dibaca' => false,
-                    'pesan' => "Peringatan: Barang dengan ID {$barang->barang_id} akan kedaluwarsa pada {$barang->kedaluwarsa} (Pengecekan $hari).",
+                    'pesan' => "[Kedaluwarsa]: Barang dengan ID {$barang->barang_id} akan kedaluwarsa pada {$barang->kedaluwarsa} (Pengecekan $hari).",
                 ]);
 
-                $noAdmin = "087786425111";
+                $user = Auth::user('no_telepon');
+                $noAdmin = $user->no_telepon;
                 #ke admin
                 try {
-                    $this->kirimPesan($noAdmin, "Peringatan: Barang dengan ID {$barang->barang_id} akan kedaluwarsa pada {$barang->kedaluwarsa} (Pengecekan $hari).");
+                    $this->kirimPesan($noAdmin, "[Kedaluwarsa]: Barang dengan ID {$barang->barang_id} akan kedaluwarsa pada {$barang->kedaluwarsa} (Pengecekan $hari).");
                     sleep(1);
                 } catch (\Exception $e) {
                     Log::error("Gagal mengirim notifikasi: " . $e->getMessage());

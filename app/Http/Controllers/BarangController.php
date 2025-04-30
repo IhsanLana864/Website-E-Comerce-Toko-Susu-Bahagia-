@@ -13,6 +13,7 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $barangs = Barang::with('kategori')->get();
+
         return view('admin.barang.index', compact('barangs'));
     }
 
@@ -58,7 +59,7 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         $kategoris = Kategori::all();
-        return view('admin.barang.edit', compact('barang', 'kategoris')); // Form edit data
+        return view('admin.barang.edit', compact('barang', 'kategoris'));
     }
 
     public function update(Request $request, Barang $barang)
@@ -67,7 +68,7 @@ class BarangController extends Controller
             'nama' => 'required',
             'kategori_id' => 'required',
             'harga' => 'required',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'satuan' => 'required',
         ]);
         

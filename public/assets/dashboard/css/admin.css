@@ -1,0 +1,77 @@
+/* public/css/admin.css */
+.bg-lightpink {
+    background-color: #43262c;
+}
+
+.sidebar {
+    background-color: #cce5ff;
+    height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #002147;
+    font-weight: 500;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #000;
+}
+
+.card-custom {
+    background-color: #ffe1e8;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-custom h5 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Styling untuk card utama */
+.card-pink {
+    background-color: #ffffff;
+    border-radius: 1rem; /* 16px */
+    padding: 1.5rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Styling tabel */
+.table-barang {
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header tabel */
+.table-barang thead {
+    background-color: #ffffff;
+    color: #003366;
+}
+
+/* Baris isi tabel */
+.table-barang tbody tr {
+    background-color: #ffffff;
+}
+
+/* Tombol Edit */
+.btn-edit {
+    background-color: #003366;
+    border-radius: 8px;
+    min-width: 60px;
+    color: white;
+}
+
+/* Tombol Hapus */
+.btn-hapus {
+    background-color: #FF5C8D;
+    border-radius: 8px;
+    min-width: 60px;
+    color: white;
+}
+
+

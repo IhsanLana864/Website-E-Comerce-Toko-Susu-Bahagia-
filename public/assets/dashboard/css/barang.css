@@ -1,0 +1,30 @@
+body {
+    background-color: #e3f2fd; /* biru muda pastel */
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#wrapper {
+    display: flex;
+}
+
+#sidebar-wrapper {
+    width: 250px;
+    background-color: #ffffff;
+    border-right: 1px solid #dee2e6;
+    min-height: 100vh;
+}
+
+#page-content-wrapper {
+    flex: 1;
+}
+
+.list-group-item.active {
+    background-color: #ffc0cb !important; /* pink pastel */
+    color: #000;
+    border-color: #ffc0cb;
+    font-weight: bold;
+}
+
+.table td img {
+    border-radius: 8px;
+}

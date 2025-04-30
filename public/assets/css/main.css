@@ -1,0 +1,474 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+  margin: 0px; 
+}
+
+/* --------------------------------Dashboard------------------------------------------------*/
+/* Logo */
+.sidebar .logo {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.sidebar .logo img {
+  max-width: 100%; /* Biar menyesuaikan container */
+  height: auto; /* Menjaga aspek rasio */
+  width: 170px; /* Bisa disesuaikan */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh; /* Full height */
+  background: #C6E8FF;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto; /* Jika ada menu panjang, bisa discroll */
+}
+
+/* Menu */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Biar menu utama memenuhi sidebar */
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #002471;
+  transition: background 0.3s ease;
+}
+
+.sidebar ul li a {
+  text-decoration: none !important; /* Paksa menghilangkan underline */
+  color: inherit !important; /* Paksa warna agar mengikuti elemen induk */
+  display: flex; /* Supaya gambar dan teks sejajar */
+  align-items: center;
+  gap: 10px; /* Beri jarak antara ikon dan teks */
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a:focus,
+.sidebar ul li a:active {
+  text-decoration: none !important; 
+  color: inherit !important;
+}
+
+.sidebar ul li img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Aktifkan warna */
+.sidebar ul li.active {
+  background: #ffff;
+  color: #002471;
+  border-radius: 20px 0px 0px 20px;
+  width: 114%;
+}
+
+.active-sub{
+  background: #ffff;
+  color: #002471;
+  border-radius: 20px 0px 0px 20px;
+  width: 123%;
+}
+
+/* Style untuk submenu */
+.submenu-items {
+  display: none;
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.submenu-items li {
+  padding: 8px 10px;
+}
+
+.submenu-items li a {
+  font-weight: normal;
+  padding: 1px;
+  display: flex;
+  align-items: start;
+  font-size: 14px;
+}
+
+.submenu-items li a img {
+  width: 18px;
+  margin-right: 10px;
+}
+
+.submenu-items li a:hover {
+  color: #003366;
+}
+
+/* Menampilkan submenu ketika aktif */
+.submenu.active .submenu-items {
+  display: block;
+}
+
+/* Tambahkan animasi dropdown */
+.dropdown-icon {
+  font-size: 12px;
+  margin-left: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.submenu.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+/* Logout */
+.sidebar ul li.logout {
+  margin-top: auto; /* Dorong Logout ke bawah */
+  padding: 15px;
+  width: 100%;
+}
+
+/* CONTENT */
+.content {
+  margin-left: 250px;
+  margin-right: 250px;
+  padding: 30px;
+  width: 75% ;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #C6E8FF;
+  border-radius: 0px 0px 20px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: -30px 20px 20px 20px; 
+}
+
+header h3 {
+  color: #002471;
+  font-weight: bold;
+}
+
+h4 {
+  color: #002471;
+  font-weight: bold;
+}
+
+/* STATISTIK */
+.stats, .best-seller, .stock {
+  background: #FFE5E5;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.best-seller ul, .stock ul {
+  list-style: none; /* Hilangkan bullet list */
+  padding: 0;
+}
+
+.best-seller li, .stock li {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Jarak antara gambar dan teks */
+  background: white; /* Background putih */
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px; /* Jarak antar item */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tambahkan efek shadow */
+}
+
+.best-seller img, .stock img {
+  width: 50px; /* Atur ukuran gambar */
+  height: auto;
+  border-radius: 5px;
+}
+
+
+.stats h2, .best-seller h2, .stock h2 {
+  color: #002471;
+}
+
+/* Date Picker */
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.date-picker input {
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Container utama */
+.stats-box {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Styling box */
+.stat-item {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  width: 280px; /* Lebar box agar sesuai gambar */
+  justify-content: space-between;
+}
+
+/* Ukuran icon */
+.icon img {
+  width: 70px;
+  height: 70px;
+}
+
+/* Styling teks */
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.stat-info .value {
+  font-size: 35px;
+  font-weight: bold;
+  color: #002471;
+}
+
+.stat-info .label {
+  font-size: 10px;
+  color: gray;
+}
+
+/* Responsif */
+@media (max-width: 600px) {
+  .stats-box {
+      flex-direction: column;
+      align-items: center;
+  }
+}
+
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .sidebar {
+      width: 200px;
+  }
+
+  .content {
+      margin-left: 200px;
+      width: calc(100% - 200px);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+      width: 70px; /* Sidebar jadi lebih kecil */
+      padding: 10px;
+  }
+
+  .sidebar .logo img {
+      width: 50px;
+      height: auto;
+  }
+
+  .sidebar ul li {
+      justify-content: center;
+      padding: 10px;
+  }
+
+  .sidebar ul li span {
+      display: none; /* Hilangkan teks, hanya ikon */
+  }
+
+  .content {
+      margin-left: 70px;
+      width: calc(100% - 70px);
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 100%;
+      height: auto;
+      position: fixed;
+      bottom: 0;
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 10px 0;
+  }
+
+  .sidebar ul {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+  }
+
+  .sidebar ul li {
+      flex-direction: column;
+      font-size: 12px;
+      padding: 5px;
+  }
+
+  .content {
+      margin-left: 0;
+      width: 100%;
+      padding: 15px;
+  }
+}
+
+/* --------------------------------Data Master------------------------------------------------*/
+
+
+
+/* --------------------------------LOGIN ADMIN------------------------------------------------*/
+.login-page {
+  background-color: #C6E8FF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0 50px;
+  font-family: 'Poppins', sans-serif;
+  color: #002471;
+}
+
+/* Container utama */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Gambar login di atas form */
+.login-image {
+  width: 180px;
+  margin-bottom: 20px;
+  margin-right: 250px;
+}
+
+/* Box login */
+.login-box {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: 400px;
+  height: 200px;
+}
+
+/* Label */
+label {
+  font-weight: bold;
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+/* Input field */
+input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #BDC3C7;
+  border-radius: 10px;
+  outline: none;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Tombol Login */
+button {
+  background-color: #002471;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #002471;
+}
+
+/* Gambar bayi di kanan */
+.image-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.image-container img {
+  width: auto;
+  height: 100vh;
+}
+
+/* 🔹 RESPONSIVE DESIGN 🔹 */
+
+/* Tablet (Lebar max 1024px) */
+@media (max-width: 1024px) {
+  body {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .image-container {
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .image-container img {
+    height: 50vh; /* Gambar lebih kecil */
+  }
+}
+
+/* HP (Lebar max 768px) */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .login-box {
+    width: 90%; /* Lebar box lebih kecil */
+  }
+  .image-container {
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .image-container img {
+    height: 40vh; /* Gambar lebih kecil di HP */
+  }
+}

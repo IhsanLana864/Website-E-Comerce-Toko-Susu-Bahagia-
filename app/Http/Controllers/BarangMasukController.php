@@ -9,9 +9,10 @@ use App\Models\Barang;
 
 class BarangMasukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $barangMasuk = BarangMasuk::with('barang')->get();
+
         return view('admin.barang_masuk.index', compact('barangMasuk'));
     }
 
@@ -93,17 +94,32 @@ class BarangMasukController extends Controller
             return redirect()->back()->with('error', 'Data barang masuk tidak ditemukan');
         }
 
-        $barang = Barang::find($barangMasuk->barang_id);
-        if (!$barang) {
-            return redirect()->back()->with('error', 'Barang tidak ditemukan');
+        $barangLama = Barang::find($barangMasuk->barang_id);
+        if (!$barangLama) {
+            return redirect()->back()->with('error', 'Barang lama tidak ditemukan');
+        }
+
+        $barangBaru = Barang::find($request->barang_id);
+        if (!$barangBaru) {
+            return redirect()->back()->with('error', 'Barang baru tidak ditemukan');
         }
 
         // Hitung selisih perubahan jumlah
         $selisih = $request->jumlah - $barangMasuk->jumlah;
 
         // Update stok barang
-        $barang->stok += $selisih;
-        $barang->save();
+        if ($barangLama->id == $barangBaru->id) {
+            // Jika barang yang diubah adalah barang yang sama
+            $barangLama->stok += $selisih;
+            $barangLama->save();
+        } else {
+            // Jika barang yang diubah berbeda
+            $barangLama->stok -= $barangMasuk->jumlah; // Kurangi stok barang lama
+            $barangLama->save();
+
+            $barangBaru->stok += $request->jumlah; // Tambah stok barang baru
+            $barangBaru->save();
+        }
 
         // Update stok_sisa berdasarkan perubahan jumlah
         $barangMasuk->stok_sisa += $selisih;
@@ -125,5 +141,18 @@ class BarangMasukController extends Controller
         $barangMasuk->save();
 
         return redirect()->route('admin.masuk.index')->with('success', 'Data barang masuk berhasil diperbarui');
+    }
+
+    //SEARCH
+    public function searchBarangAjax(Request $request)
+    {
+        $search = $request->q;
+
+        $barangs = Barang::where('nama', 'LIKE', "%$search%")
+            ->select('id', 'nama')
+            ->limit(5)
+            ->get();
+
+        return response()->json($barangs);
     }
 }

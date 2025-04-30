@@ -1,0 +1,20 @@
+
+.bg-pink {
+    background-color: #f8d7da;
+}
+
+.bg-lightblue {
+    background-color: #e3f2fd;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.img-thumbnail {
+    object-fit: cover;
+}
+
+.form-check-input {
+    margin-top: 0.4rem;
+}

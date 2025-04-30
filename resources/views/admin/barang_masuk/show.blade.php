@@ -1,56 +1,66 @@
 @extends('admin.layouts.main')
 
 @section('content')
-    <h1>Detail Barang Masuk</h1>
-    <hr>
-        <a href="{{ route('admin.masuk.edit', $barangMasuk->id) }}" class="btn btn-warning">Edit</a>
-        <div class="mb-3">
-            <label class="form-label">Barang</label>
-            <input type="text" class="form-control" name="tanggal" value="{{ $barang->nama }}" readonly>
-        </div>   
-        <div class="mb-3">
-            <label class="form-label">Tanggal</label>
-            <input type="date" class="form-control" name="tanggal" value="{{ $barangMasuk->tanggal }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Jam</label>
-            <input type="time" class="form-control" name="jam" value="{{ $barangMasuk->jam }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Jumlah</label>
-            <input type="number" class="form-control" name="jumlah" value="{{ $barangMasuk->jumlah }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Kedaluwarsa</label>
-            <input type="date" class="form-control" name="kedaluwarsa" value="{{ $barangMasuk->kedaluwarsa }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Harga Satuan</label>
-            <input type="number" class="form-control" name="harga_satuan" value="{{ $barangMasuk->harga_satuan }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Sumber</label>
-            <input type="text" class="form-control" name="sumber" value="{{ $barangMasuk->sumber }}" readonly>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Penerima</label>
-            <input type="text" class="form-control" name="penerima" value="{{ $barangMasuk->penerima }}" readonly>
-        </div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                @include('admin.sidebar')
+            </div>
 
-        <a class="btn btn-primary" href="{{ route('admin.masuk.index') }}" role="button">Kembali</a>
+            <!-- Main content -->
+            <div class="col-md-9 col-lg-10 mt-4 ps-md-4">
+                <div class="card p-4" style="background-color: #eaf6ff; border-radius: 20px;">
+                    <h3 class="fw-bold mb-4" style="color: #003366;">Show Barang Masuk</h3>
 
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+                    <div class="p-4" style="background-color: #fcdcdc; border-radius: 12px;">
+                        <div class="mb-3">
+                            <label class="form-label">Barang :</label>
+                            <input type="text" class="form-control" value="{{ $barang->nama }}" readonly>
+                        </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal :</label>
+                            <input type="date" class="form-control" value="{{ $barangMasuk->tanggal }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Jam :</label>
+                            <input type="time" class="form-control" value="{{ $barangMasuk->jam }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah :</label>
+                            <input type="number" class="form-control" value="{{ $barangMasuk->jumlah }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kedaluwarsa :</label>
+                            <input type="date" class="form-control" value="{{ $barangMasuk->kedaluwarsa }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Harga Satuan :</label>
+                            <input type="text" class="form-control" value="Rp{{ number_format($barangMasuk->harga_satuan, 0, ',', '.') }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Sumber :</label>
+                            <input type="text" class="form-control" value="{{ $barangMasuk->sumber }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Penerima :</label>
+                            <input type="text" class="form-control" value="{{ $barangMasuk->penerima }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <a class="btn btn-primary" href="{{ route('admin.masuk.index') }}" role="button">Kembali</a>
+                            <a href="{{ route('admin.masuk.edit', $barangMasuk->id) }}" class="btn btn-warning">Edit</a>   
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
-    
+    </div>
 @endsection
