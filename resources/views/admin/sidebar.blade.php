@@ -1,4 +1,4 @@
-<div class="d-flex flex-column flex-shrink-0 p-3" style="width: 250px; min-height: 100vh; background-color: #CDE6FF;">
+<div class="position-fixed d-flex justify-content-between flex-column flex-shrink-0 p-3" style="width: 250px; min-height: 100vh; background-color: #CDE6FF;">
     <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center mb-4 text-decoration-none justify-content-center">
         <img src="{{ asset('assets/images/logo new.png') }}" alt="Logo" width="180">
     </a>
@@ -74,7 +74,7 @@
         <li>
             <a href="{{ route('admin.profile.index') }}" class="nav-link {{ Route::is('admin.profile.*') ? 'active' : '' }}"
                 style="{{ Route::is('admin.profile.*') ? 'background-color: white; color: #003366;' : 'color: #003366;' }}">
-                <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> Profile
+                <i class="bi bi-person-fill me-2"></i> Profile
             </a>
         </li>
     </ul>
