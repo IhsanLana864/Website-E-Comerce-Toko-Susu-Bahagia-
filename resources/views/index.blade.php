@@ -11,7 +11,7 @@
         html{
             scroll-behavior: smooth;
         }
-        
+
         .active-filter {
             background-color: #7EBC5B !important; /* biru */
             color: white !important;
@@ -48,8 +48,7 @@
                                                 nutrisi.
                                             </p>
                                             <a href="#tes1"
-                                                class="btn btnTheme btnShop fwEbold text-white md-round py-2 px-3 py-md-3 px-md-4">Shop
-                                                Now <i class="fas fa-arrow-right ml-2"></i></a>
+                                                class="btn btnTheme btnShop fwEbold text-white md-round py-2 px-3 py-md-3 px-md-4">Toko <i class="fas fa-arrow-right ml-2"></i></a>
                                         </div>
                                     </div>
                                     <div class="imgHolder">
@@ -68,7 +67,7 @@
                         Yukkk Mom, lengkapi kebutuhan harian si Kecil!
                     </h1>
                     <span class="headerBorder d-block mb-md-5 mb-3">
-                        <img src="{{ asset('assets/images/hbdr.png') }}" alt="Header Border" class="img-fluid img-bdr" />
+                        <img src="{{ asset('assets/images/lineborder.png') }}" alt="Header Border" class="img-fluid img-bdr" />
                     </span>
                     <p>
                         Toko Susu Bahagia menghadirkan susu segar berkualitas dan produk
@@ -162,7 +161,7 @@
                 return text.replace(regex, `<span class="fw-bold" style="color:#7EBC5B;">$1</span>`);
             }
         });
-        
+
         // Filter Kategori
         $(document).ready(function() {
             $(".filter-btn").click(function() {
@@ -183,7 +182,7 @@
                     success: function(response) {
                         let html = "";
                         $.each(response, function(index, barang) {
-                            let tombolBeli = barang.stok > 0 
+                            let tombolBeli = barang.stok > 0
                                 ? `<a href="#" class="add-to-cart icon-cart d-block" data-id="${barang.id}" data-stok="${barang.stok}"></a>`
                                 : `<button class="icon-cart d-block" disabled></button>`;
 
@@ -206,7 +205,7 @@
                                             <span class="price d-block fwEbold">Rp${barang.harga.toLocaleString('id-ID')}</span>
                                             <p class="card-title">${barang.satuan}</p>
                                             <p class="card-title">Stok: ${barang.stok}</p>
-                                            
+
                                         </div>
                                     </div>
                                 </div>`;
@@ -224,7 +223,7 @@
                 });
             });
 
-            $(document).on("click", ".add-to-cart", function(e) { 
+            $(document).on("click", ".add-to-cart", function(e) {
                 e.preventDefault();
                 let barangId = $(this).data("id");
                 let stok = $(this).data("stok");

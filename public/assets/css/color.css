@@ -47,7 +47,8 @@
 .commentsBlock .commentArea .commentDate .link,
 .langList .dropdown-menu .dropdown-item a:hover,
 .langListII .dropdown-menu .dropdown-item:hover {
-  color: #5ba515; }
+    color: #003366;
+}
 
 .ui-widget-header,
 .pagination a:hover,
@@ -74,9 +75,11 @@
 .testimonailSlider .slick-dots .slick-active button,
 .cartHolder .cartTable .jcf-number .jcf-btn-inc:hover,
 .cartHolder .cartTable .jcf-number .jcf-btn-dec:hover,
-.ui-state-default, .ui-widget-content .ui-state-default,
+.ui-state-default,
+.ui-widget-content .ui-state-default,
 .productTextHolder .sizeList [type="checkbox"]:checked + .fake-input {
-  background: #5ba515; }
+    background: #003366;
+}
 
 .tabSetList a:after,
 .pagination a:hover,
@@ -89,4 +92,5 @@
 .footerHolder .tagNavList a:hover,
 .show-head .viewFilterLinks a:hover,
 .dealSlider .slick-dots button:before {
-  border-color: #5ba515; }
+    border-color: #003366;
+}
