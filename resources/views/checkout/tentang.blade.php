@@ -120,7 +120,7 @@
     </header> --}}
 
     <div class="clouds"></div>
-
+{{-- 
     <section>
         <h2>Tentang Toko Susu Bahagia</h2>
         <div class="about-container">
@@ -135,7 +135,7 @@
                 <p>Kunjungi kami dan temukan produk terbaik untuk buah hati Anda!</p>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <div class="chat-section">
         <p>Ada Pertanyaan? Hubungi Kami!</p>

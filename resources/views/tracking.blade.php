@@ -29,6 +29,7 @@
 
     {{-- <div id="pageWrapper"> --}}
         @include('include.navbar')
+        <body>
         <div class="keranjang-header">
             <img src="{{ asset('assets/images/keranjang-icon.png') }}" alt="Keranjang">
             <h1>Lacak pesanan</h1>
@@ -59,7 +60,7 @@
                                 <label class="fw-bold">Detail Pesanan</label>
                                 @foreach ($pesanan['detail_pesanan'] as $detail)
                                     <div class="order-item d-flex align-items-center">
-                                        
+
                                         <div class="flex-grow-1">{{ $detail['barang']['nama'] }} ({{ $detail['jumlah'] }}Pcs)</div>
                                         <div>Rp{{ number_format($detail['harga'] * $detail['jumlah'], 0, ',', '.') }}</div>
                                     </div>
