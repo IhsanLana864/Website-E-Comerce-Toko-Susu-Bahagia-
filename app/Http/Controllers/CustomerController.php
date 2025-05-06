@@ -192,7 +192,7 @@ class CustomerController extends Controller
 
             // Kirim notifikasi ke admin lewat Fontee
             $user = Auth::user('no_telepon');
-            $noAdmin = $user->no_telepon;
+            $noAdmin = preg_replace('/[^0-9]/', '', $user->no_telepon);
             #ke admin
             try {
                 $this->kirimPesan($noAdmin, "[PESANAN] Pesanan Baru dari: #" . $request->nama);

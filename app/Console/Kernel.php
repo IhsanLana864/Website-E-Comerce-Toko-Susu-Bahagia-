@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:cek-kedaluwarsa')->dailyAt(00.00);
+        // $schedule->command('app:cek-kedaluwarsa')->everySecond();
     }
 
     /**

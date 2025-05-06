@@ -63,7 +63,7 @@ class CekKedaluwarsa extends Command
                 ]);
 
                 $user = Auth::user('no_telepon');
-                $noAdmin = $user->no_telepon;
+                $noAdmin = preg_replace('/[^0-9]/', '', $user->no_telepon);
                 #ke admin
                 try {
                     $this->kirimPesan($noAdmin, "[Kedaluwarsa]: Barang dengan ID {$barang->barang_id} akan kedaluwarsa pada {$barang->kedaluwarsa} (Pengecekan $hari).");

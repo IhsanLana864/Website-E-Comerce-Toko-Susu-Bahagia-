@@ -37,7 +37,7 @@ class UserController extends Controller
             'no_telepon' => $request->no_telepon
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route('admin.profile.index')->with('success', 'Profil berhasil diperbarui!');
     }
 
     public function passwordForm()
@@ -62,6 +62,6 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'Password berhasil diubah.');
+        return redirect()->route('admin.profile.index')->with('success', 'Password berhasil diubah.');
     }
 }
