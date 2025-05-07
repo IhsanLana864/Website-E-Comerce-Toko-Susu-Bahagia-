@@ -31,13 +31,19 @@ class UserController extends Controller
             'no_telepon' => 'required|string|max:255',
         ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'no_telepon' => $request->no_telepon
-        ]);
-
-        return redirect()->route('admin.profile.index')->with('success', 'Profil berhasil diperbarui!');
+        try {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'no_telepon' => $request->no_telepon
+            ]);
+    
+            notify()->success('Data User berhasil diperbarui!');
+            return redirect()->route('admin.profile.index');
+        } catch (\Exception $e) {
+            notify()->error('Data User gagal diperbarui: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
     public function passwordForm()
@@ -54,14 +60,20 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password lama salah.']);
+        try {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Password lama salah.']);
+            }
+    
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+    
+            notify()->success('Password berhasil diperbarui!');
+            return redirect()->route('admin.profile.index');
+        } catch (\Exception $e) {
+            notify()->error('Password gagal diperbarui: ' . $e->getMessage());
+            return back()->withInput();
         }
-
-        $user->update([
-            'password' => Hash::make($request->new_password),
-        ]);
-
-        return redirect()->route('admin.profile.index')->with('success', 'Password berhasil diubah.');
     }
 }

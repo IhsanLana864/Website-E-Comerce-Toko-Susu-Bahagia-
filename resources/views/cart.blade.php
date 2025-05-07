@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Toko Susu Bahagia - Ecommerce</title>
+    <!-- Notify -->
+    @notifyCss
     @include('include.style')
     {{-- @include('checkout.stylecheckout') --}}
 </head>
@@ -51,7 +53,8 @@
 	<!-- COMMON SCRIPTS -->
     <script src="js/common_scripts.min.js"></script>
     <script src="js/main.js"></script>
-
+    <x-notify::notify />
+    @notifyJs
 </body>
 </html>
 @include('include.script')

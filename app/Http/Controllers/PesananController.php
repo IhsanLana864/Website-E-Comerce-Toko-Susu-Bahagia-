@@ -92,10 +92,12 @@ class PesananController extends Controller
                 throw new \Exception("Pesanan gagal disimpan.");
             }
 
-            return redirect()->route('admin.pesanan.index')->with('success', 'Status pesanan berhasil diperbarui.');
+            notify()->success('Status pesanan berhasil diperbarui!');
+            return redirect()->route('admin.pesanan.index');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.pesanan.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            notify()->error('Status pesanan gagal diperbarui: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 

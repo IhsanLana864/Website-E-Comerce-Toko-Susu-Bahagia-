@@ -25,16 +25,17 @@ class KategoriController extends Controller
         $request->validate([
             'kategori' => 'required',
         ]);
-        
-        Kategori::create($request->all());
 
-        return redirect()->route('admin.kategoris.index')->with('success', 'Kategori created successfully.');
+        try {
+            Kategori::create($request->all());
+    
+            notify()->success('Kategori berhasil ditambahkan!');
+            return redirect()->route('admin.kategoris.index');
+        } catch (\Exception $e) {
+            notify()->error('Kategori gagal ditambahkan: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
-
-    // public function show(Room $room)
-    // {
-    //     return view('rooms.show', compact('room')); // Detail data
-    // }
 
     public function edit(Kategori $kategori)
     {
@@ -46,18 +47,30 @@ class KategoriController extends Controller
         $request->validate([
             'kategori' => 'required',
         ]);
-        
-        $kategori->kategori = $request->kategori;
 
-        $kategori->save();
+        try {
+            $kategori->kategori = $request->kategori;
 
-        return redirect()->route('admin.kategoris.index')->with('success', 'Kategori updated successfully.');
+            $kategori->save();
+    
+            notify()->success('Kategori berhasil diperbarui!');
+            return redirect()->route('admin.kategoris.index');
+        } catch (\Exception $e) {
+            notify()->error('Kategori gagal diperbarui: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
     public function destroy(Kategori $kategori)
     {
-        $kategori->delete();
-
-        return redirect()->route('admin.kategoris.index')->with('success', 'Kategori deleted successfully.');
+        try {
+            $kategori->delete();
+    
+            notify()->success('Kategori berhasil dihapus!');
+            return redirect()->route('admin.kategoris.index');
+        } catch (\Exception $e) {
+            notify()->error('Kategori gagal dihapus: ' . $e->getMessage());
+            return redirect()->route('admin.kategoris.index');
+        }
     }
 }

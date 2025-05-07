@@ -32,7 +32,7 @@ class CustomerController extends Controller
             });
         }
 
-        $barangs = $query->paginate(4);
+        $barangs = $query->paginate(15);
         $allKategori = Kategori::all();
 
         if ($request->ajax()) {
@@ -258,12 +258,12 @@ class CustomerController extends Controller
 
             DB::commit();
 
-            // Redirect ke halaman informasi pesanan (pastikan rute dan view pesanan.show sudah dibuat)
-            return redirect()->route('index', ['id' => $pesanan->id])
-                            ->with('success', 'Checkout berhasil. Silakan cek informasi pesanan.');
+            notify()->success('Checkout berhasil. Silakan cek informasi pesanan.');
+            return redirect()->route('index', ['id' => $pesanan->id]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('cart')->withInput()->with('error', 'Checkout gagal: ' . $e->getMessage());
+            notify()->error('Checkout gagal: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 
@@ -332,11 +332,12 @@ class CustomerController extends Controller
             ->first();
         
         if (!$pesanan) {
-            return back()->with('error', 'Order ID tidak ditemukan. Silakan periksa kembali input Anda.');
+            notify()->info('Order ID tidak ditemukan. Silakan periksa kembali input Anda.');
+            return back();
         }
         
+        notify()->success('Pesanan ditemukan!');
         return redirect()->route('tracking')->with([
-            'success' => 'Pesanan ditemukan!',
             'pesanan' => $pesanan->toArray()
         ]);        
     }

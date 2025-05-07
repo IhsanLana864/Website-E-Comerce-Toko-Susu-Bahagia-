@@ -13,7 +13,7 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $barangs = Barang::with('kategori')->get();
-
+        
         return view('admin.barang.index', compact('barangs'));
     }
 
@@ -34,27 +34,28 @@ class BarangController extends Controller
             'satuan' => 'required',
         ]);
 
-        $fotoPath = null;
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $fotoPath = $file->store('uploads', 'public'); // Simpan di folder 'storage/app/public/uploads'
+        try {
+            $fotoPath = null;
+            if ($request->hasFile('gambar')) {
+                $file = $request->file('gambar');
+                $fotoPath = $file->store('uploads', 'public'); // Simpan di folder 'storage/app/public/uploads'
+            }
+    
+            Barang::create([
+                'nama' => $request->nama,
+                'kategori_id' => $request->kategori_id,
+                'harga' => $request->harga,
+                'gambar' => $fotoPath, // Simpan path foto
+                'satuan' => $request->satuan,
+            ]);
+    
+            notify()->success('Barang berhasil ditambahkan!');
+            return redirect()->route('admin.barangs.index');
+        } catch (\Exception $e) {
+            notify()->error('Barang gagal ditambahkan: ' . $e->getMessage());
+            return back()->withInput();
         }
-
-        Barang::create([
-            'nama' => $request->nama,
-            'kategori_id' => $request->kategori_id,
-            'harga' => $request->harga,
-            'gambar' => $fotoPath, // Simpan path foto
-            'satuan' => $request->satuan,
-        ]);
-
-        return redirect()->route('admin.barangs.index')->with('success', 'Barang created successfully.');
     }
-
-    // public function show(Room $room)
-    // {
-    //     return view('rooms.show', compact('room')); // Detail data
-    // }
 
     public function edit(Barang $barang)
     {
@@ -72,35 +73,47 @@ class BarangController extends Controller
             'satuan' => 'required',
         ]);
         
-        if ($request->hasFile('gambar')) {
-            // Hapus foto lama jika ada
-            if ($barang->gambar && \Storage::exists('public/' . $barang->gambar)) {
-                \Storage::delete('public/' . $barang->gambar);
+        try { // Tambahkan blok try-catch
+            if ($request->hasFile('gambar')) {
+                // Hapus foto lama jika ada
+                if ($barang->gambar && \Storage::exists('public/' . $barang->gambar)) {
+                    \Storage::delete('public/' . $barang->gambar);
+                }
+        
+                // Simpan foto baru
+                $fotoPath = $request->file('gambar')->store('uploads', 'public');
+                $barang->gambar = $fotoPath; // Perbarui path foto
             }
     
-            // Simpan foto baru
-            $fotoPath = $request->file('gambar')->store('uploads', 'public');
-            $barang->gambar = $fotoPath; // Perbarui path foto
+            $barang->nama = $request->nama;
+            $barang->kategori_id = $request->kategori_id;
+            $barang->harga = $request->harga;
+            $barang->satuan = $request->satuan;
+    
+            $barang->save();
+    
+            notify()->success('Barang berhasil diupdate!'); // Notifikasi sukses
+            return redirect()->route('admin.barangs.index');
+        } catch (\Exception $e) { // Tangkap exception
+            notify()->error('Barang gagal diupdate: ' . $e->getMessage()); // Notifikasi error
+            return back()->withInput(); // Redirect kembali dengan input lama
         }
-
-        $barang->nama = $request->nama;
-        $barang->kategori_id = $request->kategori_id;
-        $barang->harga = $request->harga;
-        $barang->satuan = $request->satuan;
-
-        $barang->save();
-
-        return redirect()->route('admin.barangs.index')->with('success', 'Barang updated successfully.');
     }
 
     public function destroy(Barang $barang)
     {
-        if ($barang->gambar && \Storage::exists('public/' . $barang->gambar)) {
-            \Storage::delete('public/' . $barang->gambar);
+        try {
+            if ($barang->gambar && \Storage::exists('public/' . $barang->gambar)) {
+                \Storage::delete('public/' . $barang->gambar);
+            }
+            
+            $barang->delete();
+    
+            notify()->success('Barang berhasil dihapus!');
+            return redirect()->route('admin.barangs.index');
+        } catch (\Exception $e) {
+            notify()->error('Barang gagal dihapus: ' . $e->getMessage());
+            return redirect()->route('admin.barangs.index');
         }
-        
-        $barang->delete();
-
-        return redirect()->route('admin.barangs.index')->with('success', 'Barang deleted successfully.');
     }
 }

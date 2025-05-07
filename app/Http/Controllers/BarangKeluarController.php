@@ -35,78 +35,84 @@ class BarangKeluarController extends Controller
             'penjual' => 'required',
         ]);
 
-        $barang_id = $request->barang_id;
-        $jumlah_dibeli = $request->jumlah;
-        $harga_jual = $request->harga_satuan;
-        $penjual = $request->penjual;
-        $tanggal = $request->tanggal;
-        $jam = $request->jam;
+        try {
+            $barang_id = $request->barang_id;
+            $jumlah_dibeli = $request->jumlah;
+            $harga_jual = $request->harga_satuan;
+            $penjual = $request->penjual;
+            $tanggal = $request->tanggal;
+            $jam = $request->jam;
 
-        // **Cek total stok yang tersedia**
-        $total_stok_tersedia = BarangMasuk::where('barang_id', $barang_id)
-            ->sum('stok_sisa');
+            // **Cek total stok yang tersedia**
+            $total_stok_tersedia = BarangMasuk::where('barang_id', $barang_id)
+                ->sum('stok_sisa');
 
-        if ($jumlah_dibeli > $total_stok_tersedia) {
-            return redirect()->back()->with('error', 'Stok tidak mencukupi! Hanya tersedia ' . $total_stok_tersedia . ' unit.');
-        }
-
-        $total_harga_beli = 0;
-        $sisa_dibutuhkan = $jumlah_dibeli;
-
-        // Ambil stok berdasarkan FEFO (First Expired, First Out)
-        $stok_tersedia = BarangMasuk::where('barang_id', $barang_id)
-            ->where('stok_sisa', '>', 0)
-            ->orderBy('kedaluwarsa', 'asc')
-            ->get();
-
-        foreach ($stok_tersedia as $stok) {
-            if ($sisa_dibutuhkan == 0) break;
-
-            if ($stok->stok_sisa >= $sisa_dibutuhkan) {
-                $total_harga_beli += $stok->harga_satuan * $sisa_dibutuhkan;
-
-                BarangKeluar::create([
-                    'barang_id' => $barang_id,
-                    'barang_masuk_id' => $stok->id,
-                    'tanggal' => $tanggal,
-                    'jam' => $jam,
-                    'jumlah' => $sisa_dibutuhkan,
-                    'harga_satuan' => $harga_jual,
-                    'keuntungan' => ($harga_jual * $sisa_dibutuhkan) - ($stok->harga_satuan * $sisa_dibutuhkan),
-                    'penjual' => $penjual,
-                ]);
-
-                $stok->stok_sisa -= $sisa_dibutuhkan;
-                $stok->save();
-                $sisa_dibutuhkan = 0;
-            } else {
-                $total_harga_beli += $stok->harga_satuan * $stok->stok_sisa;
-
-                BarangKeluar::create([
-                    'barang_id' => $barang_id,
-                    'barang_masuk_id' => $stok->id,
-                    'tanggal' => $tanggal,
-                    'jam' => $jam,
-                    'jumlah' => $stok->stok_sisa,
-                    'harga_satuan' => $harga_jual,
-                    'keuntungan' => ($harga_jual * $stok->stok_sisa) - ($stok->harga_satuan * $stok->stok_sisa),
-                    'penjual' => $penjual,
-                ]);
-
-                $sisa_dibutuhkan -= $stok->stok_sisa;
-                $stok->stok_sisa = 0;
-                $stok->save();
+            if ($jumlah_dibeli > $total_stok_tersedia) {
+                return redirect()->back()->with('error', 'Stok tidak mencukupi! Hanya tersedia ' . $total_stok_tersedia . ' unit.');
             }
-        }
 
-        // **Kurangi stok di tabel barangs**
-        $barang = Barang::find($barang_id);
-        if ($barang) {
-            $barang->stok -= $jumlah_dibeli;
-            $barang->save();
-        }
+            $total_harga_beli = 0;
+            $sisa_dibutuhkan = $jumlah_dibeli;
 
-        return redirect()->route('admin.keluar.index')->with('success', 'Barang keluar berhasil ditambahkan dan stok diperbarui');
+            // Ambil stok berdasarkan FEFO (First Expired, First Out)
+            $stok_tersedia = BarangMasuk::where('barang_id', $barang_id)
+                ->where('stok_sisa', '>', 0)
+                ->orderBy('kedaluwarsa', 'asc')
+                ->get();
+
+            foreach ($stok_tersedia as $stok) {
+                if ($sisa_dibutuhkan == 0) break;
+
+                if ($stok->stok_sisa >= $sisa_dibutuhkan) {
+                    $total_harga_beli += $stok->harga_satuan * $sisa_dibutuhkan;
+
+                    BarangKeluar::create([
+                        'barang_id' => $barang_id,
+                        'barang_masuk_id' => $stok->id,
+                        'tanggal' => $tanggal,
+                        'jam' => $jam,
+                        'jumlah' => $sisa_dibutuhkan,
+                        'harga_satuan' => $harga_jual,
+                        'keuntungan' => ($harga_jual * $sisa_dibutuhkan) - ($stok->harga_satuan * $sisa_dibutuhkan),
+                        'penjual' => $penjual,
+                    ]);
+
+                    $stok->stok_sisa -= $sisa_dibutuhkan;
+                    $stok->save();
+                    $sisa_dibutuhkan = 0;
+                } else {
+                    $total_harga_beli += $stok->harga_satuan * $stok->stok_sisa;
+
+                    BarangKeluar::create([
+                        'barang_id' => $barang_id,
+                        'barang_masuk_id' => $stok->id,
+                        'tanggal' => $tanggal,
+                        'jam' => $jam,
+                        'jumlah' => $stok->stok_sisa,
+                        'harga_satuan' => $harga_jual,
+                        'keuntungan' => ($harga_jual * $stok->stok_sisa) - ($stok->harga_satuan * $stok->stok_sisa),
+                        'penjual' => $penjual,
+                    ]);
+
+                    $sisa_dibutuhkan -= $stok->stok_sisa;
+                    $stok->stok_sisa = 0;
+                    $stok->save();
+                }
+            }
+
+            // **Kurangi stok di tabel barangs**
+            $barang = Barang::find($barang_id);
+            if ($barang) {
+                $barang->stok -= $jumlah_dibeli;
+                $barang->save();
+            }
+
+            notify()->success('Barang Keluar berhasil ditambahkan!');
+            return redirect()->route('admin.keluar.index');
+        } catch (\Exception $e) {
+            notify()->error('Barang Keluar gagal ditambahkan: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
     public function edit($id)
@@ -205,10 +211,12 @@ class BarangKeluarController extends Controller
             $barangBaru->save();
 
             DB::commit();
-            return redirect()->route('admin.keluar.index')->with('success', 'Data barang keluar berhasil diperbarui');
+            notify()->success('Barang Keluar berhasil diperbarui!');
+            return redirect()->route('admin.keluar.index');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            notify()->error('Barang Keluar gagal diperbarui: ' . $e->getMessage());
+            return back()->withInput();
         }
     }
 }

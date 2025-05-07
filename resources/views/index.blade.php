@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Toko Susu Bahagia - Ecommerce</title>
+    <!-- Notify -->
+    @notifyCss
     @include('include.style')
     <style>
         html{
@@ -66,7 +68,7 @@
                     <h1 class="headingIV playfair fwEblod mb-4" id="tes1">
                         Yukkk Mom, lengkapi kebutuhan harian si Kecil!
                     </h1>
-                    <span class="headerBorder d-block mb-md-5 mb-3">
+                    <span class="headerBorder d-block mb-md-5 mb-3 ">
                         <img src="{{ asset('assets/images/lineborder.png') }}" alt="Header Border" class="img-fluid img-bdr" />
                     </span>
                     <p>
@@ -282,5 +284,7 @@
             });
         }
     </script>
+    <x-notify::notify />
+    @notifyJs
 </body>
 </html>
