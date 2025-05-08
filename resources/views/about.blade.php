@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <title>Toko Susu Bahagia - Ecommerce</title>
     @include('include.style')
-    <style>
+    {{-- <style>
         html {
             scroll-behavior: smooth;
         }
@@ -36,8 +36,9 @@
         .title-shadow {
             text-shadow: 2px 2px #aaa;
         }
-    </style>
+    </style> --}}
 </head>
+
 <body>
     <div id="pageWrapper">
         @include('include.navbar')
@@ -58,11 +59,13 @@
                                                 <span class="text-break d-block"></span>
                                             </h2>
                                             <p class="mb-xl-15 mb-lg-10">
-                                                Tumbuh Sehat dengan Susu Terbaik!<br>Dukung pertumbuhan si kecil dan kesehatan
-                    keluarga dengan susu segar penuh nutrisi.
+                                                Tumbuh Sehat dengan Susu Terbaik!<br>Dukung pertumbuhan si kecil dan
+                                                kesehatan
+                                                keluarga dengan susu segar penuh nutrisi.
                                             </p>
                                             <a href="#tes1"
-                                                class="btn btnTheme btnShop fwEbold text-white md-round py-2 px-3 py-md-3 px-md-4">Toko <i class="fas fa-arrow-right ml-2"></i></a>
+                                                class="btn btnTheme btnShop fwEbold text-white md-round py-2 px-3 py-md-3 px-md-4">Toko
+                                                <i class="fas fa-arrow-right ml-2"></i></a>
                                         </div>
                                     </div>
                                     <div class="imgHolder">
@@ -94,13 +97,14 @@
                     </div>
                 </div>
             </section>
-    </body>
+        </main>
+</body>
 
-    @include('checkout.tentang')
-    <!-- Scripts -->
-    <script src="js/common_scripts.min.js"></script>
-    <script src="js/main.js"></script>
-    @include('include.script')
+@include('checkout.tentang')
+<!-- Scripts -->
+<script src="js/common_scripts.min.js"></script>
+<script src="js/main.js"></script>
+@include('include.script')
 </body>
 @include('include.footer')
 
