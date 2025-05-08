@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <title>Toko Susu Bahagia - Ecommerce</title>
     @include('include.style')
-    {{-- <style>
+    <style>
         html {
             scroll-behavior: smooth;
         }
@@ -36,9 +36,8 @@
         .title-shadow {
             text-shadow: 2px 2px #aaa;
         }
-    </style> --}}
+    </style>
 </head>
-
 <body>
     <div id="pageWrapper">
         @include('include.navbar')
@@ -63,7 +62,7 @@
                                                 kesehatan
                                                 keluarga dengan susu segar penuh nutrisi.
                                             </p>
-                                            <a href="#tes1"
+                                            <a href="{{ route('index') }}"
                                                 class="btn btnTheme btnShop fwEbold text-white md-round py-2 px-3 py-md-3 px-md-4">Toko
                                                 <i class="fas fa-arrow-right ml-2"></i></a>
                                         </div>
@@ -98,8 +97,7 @@
                 </div>
             </section>
         </main>
-</body>
-
+    <div>
 @include('checkout.tentang')
 <!-- Scripts -->
 <script src="js/common_scripts.min.js"></script>
