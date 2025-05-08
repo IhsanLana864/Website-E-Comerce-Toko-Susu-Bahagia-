@@ -9,9 +9,15 @@
 </head>
 <body>
     <div class="auth-bg" style="background-image: url('{{ asset('assets/images/Background1.png') }}'); background-size: cover;">
-        <div class="auth-overlay d-flex justify-content-center align-items-center vh-100">
-            @yield('content')
-        </div>
+        <div class="auth-overlay d-flex align-items-center vh-100">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                    @yield('content')
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 </body>
 </html>

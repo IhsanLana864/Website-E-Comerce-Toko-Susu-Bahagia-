@@ -3,7 +3,7 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+<div class=" card p-4 shadow" style="width: 100%; max-width: 400px;">
     <h3 class="text-center mb-4 text-primary fw-bold">Login</h3>
     <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -25,7 +25,7 @@
                 </span>
             @enderror
         </div>
-        
+
         <button type="submit" class="btn btn-primary w-100">LOGIN</button>
         @if (Route::has('password.request'))
             <a class="btn btn-link" href="{{ route('password.request') }}">
