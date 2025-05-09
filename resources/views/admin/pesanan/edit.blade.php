@@ -60,6 +60,7 @@
                                         <option value="Ditolak">Ditolak</option>
                                         <option value="Dikemas">Dikemas</option>
                                         <option value="Dikirim">Dikirim</option>
+                                        <option value="Selesai">Selesai</option>
                                     </select>
                                     <!-- @foreach (['Pending', 'Diterima', 'Ditolak', 'Dikemas', 'Dikirim', 'Selesai'] as $status)
                                         <button class="btn btn-outline-primary btn-sm"
