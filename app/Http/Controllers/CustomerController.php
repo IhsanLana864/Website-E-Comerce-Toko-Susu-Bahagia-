@@ -32,13 +32,16 @@ class CustomerController extends Controller
             });
         }
 
-        $barangs = $query->paginate(15);
+        $barangs = $query->with(['barangMasuk' => function ($masukQuery) {
+            $masukQuery->where('stok_sisa', '>', 0)->orderBy('kedaluwarsa', 'asc')->limit(1); //ambil 1 data yang terdekat
+        }])->paginate(15);
+        // $barangs = $query->paginate(15);
         $allKategori = Kategori::all();
 
         if ($request->ajax()) {
             return view('partials.barang-list', compact('barangs'))->render();
         }
-    
+
         return view('index', compact('barangs', 'allKategori'));
     }
 
