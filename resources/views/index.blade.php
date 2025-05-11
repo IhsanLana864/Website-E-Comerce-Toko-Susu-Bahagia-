@@ -68,7 +68,7 @@
                     <h1 class="headingIV playfair fwEblod mb-4" id="tes1">
                         Yukkk Mom, lengkapi kebutuhan harian si Kecil!
                     </h1>
-                    <span class="headerBorder d-block mb-md-5 mb-3 ">
+                    <span class="d-flex justify-content-center headerBorder d-block mb-md-5 mb-3 ">
                         <img src="{{ asset('assets/images/lineborder.png') }}" alt="Header Border" class="img-fluid img-bdr" />
                     </span>
                     <p>

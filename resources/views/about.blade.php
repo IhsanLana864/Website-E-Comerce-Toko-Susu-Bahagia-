@@ -28,7 +28,7 @@
         }
 
         .cloud-bg {
-            background-image: url('/assets/clouds.svg');
+            background-image: url('/assets/images/clouds.png');
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -107,3 +107,4 @@
 @include('include.footer')
 
 </html>
+
